@@ -11,7 +11,7 @@ resource "azurerm_storage_container" "adfctr" {
 
 data "azurerm_storage_account_blob_container_sas" "sasctr" {
   connection_string = data.azurerm_storage_account.adfstr.primary_connection_string
-  container_name    = azurerm_storage_container.adfctr.name
+  container_name    = try(azurerm_storage_container.adfctr.name , "default_adf_startup_container")
   https_only        = true
 
   start  = var.startupsettingsadf.start
