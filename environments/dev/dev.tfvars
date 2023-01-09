@@ -20,7 +20,7 @@ resource_groups = {
   # }
 
   shared = {
-    name              = "ava-mod-demo-002-shared-rg"
+    name              = "ava-mod-poc-shared-rg"
     enabled           = true
     reuse             = true // false => will deploy the resource ; true => if the resource group exists
     location          = "eastus2" // TO-DO: - how to move this to a variable ?
@@ -28,7 +28,7 @@ resource_groups = {
   }
 
   app = {
-    name              = "ava-mod-demo-002-app-rg"
+    name              = "ava-mod-poc-app-rg"
     enabled           = true
     reuse             = true // false => will deploy the resource ; true => if the resource group exists
     location          = "eastus2"
@@ -36,7 +36,7 @@ resource_groups = {
   }
 
   db = {
-    name              ="ava-mod-demo-002-db-rg"
+    name              ="ava-mod-poc-db-rg"
     enabled           = true
     reuse             = true // false => will deploy the resource ; true => if the resource group exists
     location          = "eastus2"
@@ -48,7 +48,7 @@ resource_groups = {
 # // START ACR
 dockerregistry={ 
     acr1 = {         
-      name                     = "avamoddemo002acr" // TO-DO: how to follow naming convention?
+      name                     = "avamodpocacr" // TO-DO: how to follow naming convention?
       resource_group_key      =  "shared"       
       sku                      = "Premium"  // TO-DO: how to have a list of SKU availables ?
       admin_enabled            =  true      // TO-DO: What's this for?
@@ -62,7 +62,7 @@ privateendpoint_dockerregistry= {
       network_resource_group = "ava-mod-poc-network-rg" // TO-DO: how to change this to a DATA object or variable? 
       virtual_network_name="ava-mod-poc-vnet" // TO-DO: how to change to a DATA object or variable?
       subnet_name="default" // TO-DO: how to change to a DATA object or variable?
-      name = "avamoddemo002acr-pe"  // TO-DO: how to follow naming convention
+      name = "avamodpocacr-pe"  // TO-DO: how to follow naming convention
       key = "acr1" 
       dns_zone_group_name = "default" 
       private_dns_zone = "privatelink.azurecr.io" // TO-DO: how to change to DATA or variable?

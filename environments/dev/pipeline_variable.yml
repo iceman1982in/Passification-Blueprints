@@ -16,8 +16,8 @@
   placeholder_var: placeholder
   # Variables below need to be declared in DevOps Pipeline variables UI
   
-  serviceConnection: 'SC-AIDOT-IT-SANDBOX-PaaSification-DEMO-002'  
-  terraformstorageaccount: 'tfpaasificationdemo002sa'
+  serviceConnection: 'sppaasconn'  
+  terraformstorageaccount: 'tfpaasificationpocsa'
   terraformSubscription: fb6eefcf-89bb-4ee1-8690-a799d5eb008e
   terraformstoragerg: AVA-TFADMIN-DEV-PAAS
   environment: dev
@@ -27,6 +27,6 @@
   storagekey: Will be AUTO GENERATED
   location: eastus2
   devOps_org_name: PaaSification
-  devOps_project_name : PaaSification-DEMO-002
-  devOps_repo_name: PaaSification-DEMO-002
+  devOps_project_name : PaaSification-Blueprint
+  devOps_repo_name: PaaSificationBP-AllResources
   subscription_core_id : "fb6eefcf-89bb-4ee1-8690-a799d5eb008e"
