@@ -149,7 +149,6 @@ variable "privateendpoint_adf"{
 variable "startupsettingsadf" {
   type        = map(any)
   description = "(Optional) A map of tags to be applied globally on all Azure resource groups"
-  default     = {}
 }
 
 
