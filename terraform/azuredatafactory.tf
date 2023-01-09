@@ -31,5 +31,5 @@ module "datafactory_runtime" {
   virtual_network_name    = try(each.value.virtual_network_name, null)
   subnet_name             = try(each.value.subnet_name, null)
   blob_container_uri = "${data.azurerm_storage_account.adfstr[count.index].primary_blob_endpoint}/${azurerm_storage_container.adfctr[count.index].name}"
-  sas_token          = data.azurerm_storage_account_blob_container_sas.sasctr.sas
+  sas_token          = data.azurerm_storage_account_blob_container_sas.sasctr[count.index].sas
 }
