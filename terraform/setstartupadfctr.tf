@@ -32,7 +32,6 @@ data "azurerm_storage_account_blob_container_sas" "sasctr" {
 
 
 resource "azurerm_storage_blob" "tamopsblobs" {
-  count             = var.startupsettingsadf ? 1 : 0
   for_each = fileset("${path.module}/file_uploads", "*")  
   name                   = each.key
   storage_account_name   = data.azurerm_storage_account.adfstr.name
