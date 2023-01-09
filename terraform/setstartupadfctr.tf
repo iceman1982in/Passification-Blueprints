@@ -6,14 +6,14 @@ data "azurerm_storage_account" "adfstr" {
 
 resource "azurerm_storage_container" "adfctr" {
   name                  = var.startupsettingsadf.storage_container
-  storage_account_name  = data.azurerm_storage_account.adfstr.name
+  storage_account_name  = data.azurerm_storage_account.adfstr[count.index].name
   container_access_type = var.startupsettingsadf.container_access_type
   count                 = var.startupsettingsadf ? 1 : 0
 }
 
 data "azurerm_storage_account_blob_container_sas" "sasctr" {
   count             = var.startupsettingsadf ? 1 : 0
-  connection_string = data.azurerm_storage_account[count.index].adfstr.primary_connection_string
+  connection_string = data.azurerm_storage_account.adfstr[count.index].primary_connection_string
   container_name    = try(azurerm_storage_container.adfctr.name , "default_adf_startup_container")
   https_only        = true
 
