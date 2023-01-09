@@ -1,0 +1,31 @@
+#=========================================================================================
+# In order to use this pipeline in the correct manner you need a few variables setup.
+# Please set up ALL secret variables manually via Pipeline variables 
+# DO NOT SPECIFY SECRETS IN THIS FILE, securely pass them via DevOps pipeline variable
+
+# terraform_version - terraform version to be downloaded and used in the Pipeline (ex. 0.15.3)
+# serviceConnection - name of the DevOps service connection to deploy with
+# Environment - name of terraform  environment. MUST match the environment name.
+# terraformstorageaccount - storage account name that contains the tfstate.
+# terraformstoragerg - resource group that contains the tfstate storage account 
+# terraformSubscription - subscription ID that contains the tfstate storage account & subscription ID that will have all terraform plan, apply and destroy operations performed
+# keyVaultName - name of keyvault where git ssh secrets will be stored
+# location - deployment location
+#=========================================================================================
+ variables:
+  placeholder_var: placeholder
+  # Variables below need to be declared in DevOps Pipeline variables UI
+  
+  serviceConnection: CONNECTION_NAME  
+  terraformstorageaccount: TERRAFORM_STORAGEACCOUNT_NAME
+  terraformSubscription: TERRAFORM_SUBSCRIPTION_ID
+  terraformstoragerg: TERRAFORM_RESOURCEGRP_NAME
+  environment: Env
+  tenant_id: TENANT_ID
+  terraform_containername: ENV_NAME  
+  keyVaultName: KV_NAME
+  storagekey: Will be AUTO GENERATED
+  location: LOCATION
+  devOps_org_name: DEVOPS ORGANIZATION NAME
+  devOps_project_name : PROJECT NAME
+  devOps_repo_name: REPO NAME

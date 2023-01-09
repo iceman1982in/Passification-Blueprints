@@ -1,0 +1,301 @@
+trigger:
+- none
+
+pool:
+  vmimage: 'windows-2019'
+
+variables:
+- template: pipeline_variable.yml  # Template reference
+
+stages:
+ - stage: 'Build'
+   displayName: 'Initialize Build'
+   jobs: 
+   - job: Initialize_Build
+     steps:  
+      - task: PowerShell@2
+        inputs:
+         filePath: '$(System.DefaultWorkingDirectory)\ReplaceTerraformModuleSources.ps1'
+         arguments: '-devOps_org_name $(devOps_org_name) -devOps_project_name $(devOps_project_name) -devOps_repo_name $(devOps_repo_name)'
+         
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: './environments'
+          Contents: '**'
+          TargetFolder: '$(build.artifactstagingdirectory)/environments'    
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: './terraform'
+          Contents: '**'
+          TargetFolder: '$(build.artifactstagingdirectory)/terraform'     
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Build.artifactstagingdirectory)'
+          artifact: 'terraform'
+          publishLocation: 'pipeline'  
+      
+ - stage: 'Admin_Setup'
+   displayName: Admin Setup
+   dependsOn: 'Build'
+   jobs:
+     - job: Prepare_AdminSetup
+       steps:
+        - task: AzureCLI@1
+          displayName: 'Create Admin Resource Group and Storage acct'
+          inputs:
+            azureSubscription: $(serviceConnection)
+            scriptLocation: inlineScript
+            inlineScript: |            
+                call az group create --location $(location) --name $(terraformstoragerg)
+
+                call az storage account create --name $(terraformstorageaccount) --resource-group $(terraformstoragerg) --location $(location) --sku Standard_LRS  --min-tls-version TLS1_2
+
+                call az storage container create --name $(environment) --account-name $(terraformstorageaccount)
+
+                call az storage account keys list -g $(terraformstoragerg) -n $(terraformstorageaccount)
+            
+        - task: AzurePowerShell@3
+          displayName: 'Get storage key'
+          inputs:
+              azureSubscription:  $(serviceConnection)
+              ScriptType: InlineScript
+              azurePowerShellVersion: 'LatestVersion'
+              Inline: |
+                  # Using this script we will fetch storage key which is required in terraform file to authenticate backend storage account
+                  $key=(Get-AzureRmStorageAccountKey -ResourceGroupName $(terraformstoragerg) -AccountName $(terraformstorageaccount)).Value[0]
+                  Write-Host "##vso[task.setvariable variable=storagekey]$key"
+
+        - task: AzureCLI@1
+          displayName: 'Create Keyvault and store secrets'
+          inputs:
+            azureSubscription: $(serviceConnection)            
+            scriptLocation: 'inlineScript'
+            inlineScript:  |   
+               call az keyvault create --name  $(keyVaultName) --resource-group $(terraformstoragerg) --location $(location)
+
+               call az keyvault secret set --vault-name $(keyVaultName) --name "terraform-git-ssh-pub" --value "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDPPrI+/SPoXg3kR2FbNgaN4UkD1jMDY/mduoBPK4EFgS5h5sK768uAAN2FAGbYjPMgZkrtQnR0lbboq+ReG6YxsubrX8JoixESiVDJVPFdLustqE38HAB12QVprkrEC9zzf1YKlW/Tg/u/0T+pchGfDvv99SvriLV9h5KH6CyVSLE2TC5DwwBS/OQsWpAPSQZBQFbDMQ9tWlKrz1BYiKkihsoyBvOxu6Q0bWRELFpVcJnSgm9G5AO5Rp+2MdiJUN/2HDV+83JhOMmQil1oRImZElQ0GiTWkaBWcNJlnSXT2Vh8/pKakVNntXQBmfwQI2XjDIPNNzW2n57c7sBvuU5ySKVmMY7FATBWfz6l01hocWOiMg+Zaco5Nv5XSB0TjmgDePLZGGxqzHfQP/AHqqEnws7PbQMO980kabgVs45ZB/diYPg6iUAmIeMjiqMco2CN8AsHmiYemanvtMXHYdypCjnw7KlvydrMPgcq3W0ethLZbaYKowlfIeK+LyGe7qk= dir\sethuram.ramani@P5LAP-013499C"
+
+               call az keyvault secret set --vault-name $(keyVaultName) --name "terraform-git-ssh-known-hosts" --value "|1|KF4sLbv9fkJzAxBxl6Ig0RHUj6I=|5v83XlJfUTioWqwzfSTD7BWmilg= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H"
+
+            addSpnToEnvironment: true
+            
+
+        - task: DownloadPipelineArtifact@2
+          inputs:
+                  artifact: terraform
+                  path: $(Build.Repository.LocalPath)/terraform/
+          displayName: 'Download Terraform files'
+
+        - task: replacetokens@5
+          displayName: 'Replace tokens in **/*.tf'
+          inputs:                      
+                  rootDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'     
+                  targetFiles: '**/*.tf'
+                  tokenPattern: custom
+                  tokenPrefix: '__'
+                  tokenSuffix: '__'
+                  escapeType: none  
+
+        - task: replacetokens@5
+          displayName: 'Replace tokens in **/*.tfvars'
+          inputs:                      
+                  rootDirectory: '$(Build.Repository.LocalPath)/terraform/environments/$(environment)'     
+                  targetFiles: '**/*.tfvars'
+                  tokenPattern: custom
+                  tokenPrefix: '__'
+                  tokenSuffix: '__'
+                  escapeType: none  
+
+        - task: CopyFiles@2
+          inputs:
+                  SourceFolder: '$(Build.Repository.LocalPath)/terraform'
+                  Contents: '**'
+                  TargetFolder: '$(build.artifactstagingdirectory)/updated'     
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+                targetPath: '$(build.artifactstagingdirectory)/updated'
+                artifact: 'terraformupdated'
+                publishLocation: 'pipeline'
+
+ - stage: 'Prepare_Plan_Terraform'
+   displayName: "Plan Terraform"
+   dependsOn: 'Admin_Setup'
+   jobs: 
+      - job: Prepare_Terraform_1
+        steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                  artifact: terraformupdated
+                  path: $(Build.Repository.LocalPath)/terraform/
+              displayName: 'Download Terraform '
+            
+            - task: AzureKeyVault@1
+              displayName: Keyvault
+              enabled: true  # AzureKeyVault@enabled
+              inputs:
+                azureSubscription: $(serviceConnection)
+                KeyVaultName: $(keyVaultName)
+                secretsFilter: 'terraform-git-ssh-known-hosts,terraform-git-ssh-pub'
+                runAsPreJob: true
+
+            - task: InstallSSHKey@0
+              displayName: 'Install SSH key'
+              enabled: true  # InstallSSHKey@enabled
+              inputs:
+                knownHostsEntry: '$(terraform-git-ssh-known-hosts)'
+                sshPublicKey: '$(terraform-git-ssh-pub)'
+                sshKeySecureFile: 'terraform_rsa'
+
+
+            - task: TerraformInstaller@0
+              inputs:
+                terraformVersion: 'latest'                
+                           
+              
+            - task: TerraformTaskV3@3
+              displayName: 'Terraform: Init'
+              inputs:
+                    command: 'init'
+                    workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'
+                    backendServiceArm: $(serviceConnection)
+                    backendAzureRmResourceGroupName: '$(terraformstoragerg)'
+                    backendAzureRmStorageAccountName: '$(terraformstorageaccount) '
+                    backendAzureRmContainerName: '$(environment)'
+                    backendAzureRmKey: terraform.tfstate
+            
+            - task: TerraformTaskV3@3
+              displayName: 'Terraform: Validate'
+              inputs:
+                provider: 'azurerm'
+                command: 'validate'
+        
+            - task: TerraformTaskV3@3
+              displayName: 'Terraform: Plan'
+              inputs:
+                provider: 'azurerm'
+                command: 'plan'
+                commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" -out=$(Build.Repository.LocalPath)/terraform/tfplan '
+                workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'                
+                environmentServiceNameAzureRM: $(serviceConnection)
+                    
+            - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(Build.Repository.LocalPath)/terraform/tfplan'
+                ArtifactName: tfplan
+                artifactType: pipeline
+              displayName: 'Publish Terraform plan'
+
+            - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(Build.Repository.LocalPath)/terraform/terraform/.terraform'
+                artifactName: terraform init
+              displayName: 'Publish Terraform init'
+              enabled: true
+
+            - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(Build.Repository.LocalPath)/terraform/terraform/.terraform.lock.hcl'
+                artifactName: terraform provider lock
+              displayName: 'Publish Terraform Provider Lock File'
+              enabled: true
+
+ -  stage: 'Plan_Approval'
+    displayName: Plan Approval
+    dependsOn: Prepare_Plan_Terraform
+    jobs:
+    -   job: waitForValidation
+        displayName: Wait for validation
+        pool: server    
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:   
+            -   task: ManualValidation@0
+                timeoutInMinutes: 1440 # task times out in 1 day
+                inputs:
+                    instructions: 'Please check and validate Terraform Plan to apply the changes'
+                    onTimeout: 'reject'
+
+ - stage: Terraform_Apply
+   displayName: Terraform Apply
+   dependsOn: 'Plan_Approval'
+   jobs: 
+      
+      - deployment: Terraform_Apply
+        environment: Terraform_ApplyOrDestroy
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              # Setting checkout=self to force retrieval of source code for Microsoft hosted agents
+              - checkout: self
+              # Setting download=none to force explicit download of minimally required artifacts
+              - download: none
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  artifact: terraformupdated
+                  path: $(Build.Repository.LocalPath)/terraform/
+                displayName: 'Download Terraform exe'
+
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  artifact: terraform init
+                  path: $(Build.Repository.LocalPath)/terraform/terraform/.terraform
+                displayName: 'Download Terraform init'
+
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  artifact: terraform provider lock
+                  path: $(Build.Repository.LocalPath)/terraform/terraform
+                displayName: 'Download Terraform Provider Lock File'
+
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  artifact: tfplan
+                  path: $(Build.Repository.LocalPath)/terraform/terraform
+                displayName: 'Download Terraform plan'
+              
+              - task: TerraformInstaller@0
+                inputs:
+                   terraformVersion: 'latest'            
+              
+              - task: TerraformTaskV3@3
+                inputs:
+                  provider: 'azurerm'
+                  command: 'apply'
+                  workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'       
+                  commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" '
+                  environmentServiceNameAzureRM: $(serviceConnection)
+
+ -  stage: 'Verify_Deployment'
+    displayName: Integration Tests
+    dependsOn: [Terraform_Apply]
+    jobs:
+      - job: Integration
+        displayName: Integration tests        
+        steps:      
+            - task: AzurePowerShell@5
+              inputs:
+                azureSubscription: $(serviceConnection)
+                ScriptType: 'FilePath'
+                ScriptPath: './tests/statefile.test.ps1'
+                ScriptArguments: '-backendAzureRmResourceGroupName $(terraformstoragerg) -backendAzureRmStorageAccountName $(terraformstorageaccount) -backendAzureRmContainerName $(environment) -backendAzureRmKey "terraform.tfstate"'
+                azurePowerShellVersion: 'LatestVersion'
+                pwsh: true
+                
+            - task: PublishTestResults@2
+              inputs:
+                testResultsFormat: 'NUnit'
+                testResultsFiles: '**/testResults.xml'
+                failTaskOnFailedTests: false
+                testRunTitle: 'State File Validation'
+            
+            - task: PublishBuildArtifacts@1
+              inputs:
+                #pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+                #artifactName: 'statefile' 
+                publishLocation: 'container' # Options: container, filePath
+                targetPath: $(statelocation)
+                #parallel: false # Optional
+                #parallelCount: # Optional
+                #fileCopyOptions: #Optional

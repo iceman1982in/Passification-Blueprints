@@ -1,0 +1,1 @@
+powershell ./setupdnsserver.ps1 "'10.160.130.78 10.160.130.73'"
