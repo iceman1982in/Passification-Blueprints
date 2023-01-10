@@ -172,6 +172,14 @@ appserviceplans = {
     size               = "S1" // TO-DO: Other Sizes?
     tier               = "standard" // TO-DO: Other Tiers ? 
   }
+  "appserviceplanlinux-dev" = {
+    name               = "ava-mod-poc-appserviceplanlinux-dev"
+    location           = "eastus2"
+    resource_group_key = "app"
+    kind               = "Linux" // TO-DO: Other options?
+    size               = "S1" // TO-DO: Other Sizes?
+    tier               = "standard" // TO-DO: Other Tiers ? 
+  }
 }
 application_insights = {
   appinsights = {
@@ -201,6 +209,26 @@ appservice = {
     https_only = true
     vnet_route_all_enabled = true
   }  
+
+  "linux1" = {
+    name               = "ava-mod-poc-webapplinux001-dev"
+    location           = "eastus2"
+    resource_group_key = "app"
+    app_plan_id        = "appserviceplanlinux-dev"
+    app_insightskey   =   "appinsights"
+    https_only = true
+    vnet_route_all_enabled = true
+  }
+
+  "linuxwebjob" = {
+    name               = "ava-mod-poc-webjoblinux001-dev"
+    location           = "eastus2"
+    resource_group_key = "app"
+    app_plan_id        = "appserviceplanlinux-dev"
+    app_insightskey   =   "appinsights"
+    https_only = true
+    vnet_route_all_enabled = true
+  }  
 }
 // TO-DO: WORK WITH BINDINGS + AUTOMATION
 # appservice_bindings={//fill with respective client values
@@ -219,6 +247,12 @@ appservice_vnetintegration= {//fill with respective client values
         subnet_name="ava-mod-integration"
         webapp_key = "app1"
   }
+  linux1 = {         
+        network_resource_group = "ava-mod-poc-network-rg"
+        virtual_network_name="ava-mod-poc-vnet"
+        subnet_name="ava-mod-integration"
+        webapp_key = "linux1"
+  }
 }
 privateendpoint_appservice= {
   appserviceep1={
@@ -233,7 +267,21 @@ privateendpoint_appservice= {
       private_dns_zone_resource_group = "ava-mod-poc-dns-rg"
       subresource_name = "sites"
   }
+
+  appservicelinuxep1={
+      resource_group_key = "app"    
+      network_resource_group = "ava-mod-poc-network-rg"
+      virtual_network_name="ava-mod-poc-vnet"
+      subnet_name="default"
+      name = "ava-mod-poc-webapplinux001-dev-pe"
+      key = "linux1"
+      dns_zone_group_name = "default"
+      private_dns_zone = "privatelink.azurewebsites.net"
+      private_dns_zone_resource_group = "ava-mod-poc-dns-rg"
+      subresource_name = "sites"
+  }
 }
+
 keyvault_access_policies = {
     policy1= {
       keyvault_key= "kv1",
