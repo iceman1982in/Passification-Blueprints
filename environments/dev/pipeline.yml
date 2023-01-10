@@ -1,5 +1,19 @@
-trigger:
-- none
+trigger: #none
+# Push trigger specifies which branches cause a continuous integration build to run. If you specify no push trigger, pushes to any branch trigger a build. 
+  branches:
+    include:
+      - main
+      - master
+      - feature/*
+      - hotfix/*
+      - dev
+      - dev-test
+      - bug/*
+      - release/*
+  paths:
+    include:
+      - environments/dev/*
+
 
 pool:
   vmimage: 'windows-2019'
