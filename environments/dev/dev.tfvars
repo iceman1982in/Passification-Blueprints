@@ -314,37 +314,34 @@ sql_server_db = {
 
 
 # // START MY SQL
-# mysql_server = {
-#   mysqlserver1 = {
-#     name               = "avamodpocmysql001dev"
-#     location           = "eastus2"
-#     resource_group_key = "db"
-#     sqlversion         = "5.7"
-#     admin_username     = "sqadmin123"
-#     admin_password     = "Sqadmin#11122"
-#     sku_name   = "GP_Standard_D2ds_v4"  
-#     backup_retention_days             = 7
-#     geo_redundant_backup_enabled      = false
-#     delegated_subnet = "ava-mod-poc-flexible-server-001"
-#     private_dns_zone = "privatelink.mysql.database.azure.com"
-#     tags               = ""
-#     azuread_administrator  = {
-#           azuread_authentication_only = false
-#           login_username              = "s.vaz@avanade.com"
-#           object_id                   = "dd6e4bcf-6c60-4ec4-8066-3bab70eed33a" #value of object id 
-#           tenant_id                   = "5c7fbefe-6f52-4cab-bb0f-099dc2e314b9"  #tenant id 
-#     }
-#   }
-# }
-
-# mysql_server_db = {
-#   db1 = {
-#     name                   = "avamodpocmysqldb001"
-#     resource_group_key     = "db"    
-#     server_key            = "mysqlserver1"
-#     charset             = "utf8"
-#     collation           = "utf8_unicode_ci"
-#   } 
-# }
+mysql_server = {
+  server1 = {
+    name               = "ava-mod-poc-mysqlserver-dev"
+    location           = "eastus"
+    resource_group_key = "db"
+    sqlversion         = "5.7"
+    admin_username     = "sqadmin123"
+    admin_password     = "Sqadmin#11122"
+    sku_name   = "GP_Standard_D2ds_v4"  
+    backup_retention_days             = 7
+    geo_redundant_backup_enabled      = false  
+    tags               = ""
+    azuread_administrator  = {
+          azuread_authentication_only = false
+          login_username              = "s.vaz@avanade.com"
+          object_id                   = "dd6e4bcf-6c60-4ec4-8066-3bab70eed33a" #value of object id 
+          tenant_id                   = "5c7fbefe-6f52-4cab-bb0f-099dc2e314b9"  #tenant id 
+    }
+  }
+}
+mysql_server_db = {
+  db1 = {
+    name                   = "avamodmysqlservdb1"
+    resource_group_key     = "db"    
+    server_key            = "server1"
+    charset             = "utf8"
+    collation           = "utf8_unicode_ci"
+  } 
+}
 
 # // END OF MYSQL SERVER
