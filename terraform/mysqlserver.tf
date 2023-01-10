@@ -20,10 +20,8 @@ module "mysql_server" {
   admin_password      = each.value.admin_password
   sku_name            = each.value.sku_name 
 
-  delegated_subnet_id = each.value.delegated_subnet_id
-  private_dns_zone_id = each.value.private_dns_zone_id
-
   azuread_administrator = each.value.azuread_administrator  
+  
   
   backup_retention_days             = each.value.backup_retention_days
   geo_redundant_backup_enabled      = each.value.geo_redundant_backup_enabled

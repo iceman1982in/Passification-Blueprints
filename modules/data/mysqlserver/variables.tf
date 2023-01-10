@@ -79,13 +79,3 @@ variable "sku_name" {
   description = "The sku_name associated "
   default     = ""
 }
-
-variable "delegated_subnet_id" {
-  description = "Subnet delegated to Flexible Servers"
-  default = ""
-}
-
-variable "private_dns_zone_id" {
-  description = "Private DNS Zone for Flexible servers"
-  default = ""
-}
