@@ -258,7 +258,7 @@ appservice_vnetintegration= {//fill with respective client values
   linux1 = {         
         network_resource_group = "ava-mod-poc-network-rg"
         virtual_network_name="ava-mod-poc-vnet"
-        subnet_name="ava-mod-integration"
+        subnet_name="ava-mod-integration-linux"
         webapp_key = "linux1"
   }
 }
