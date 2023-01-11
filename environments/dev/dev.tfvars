@@ -135,29 +135,29 @@ privateendpoint_storage = { //fill with respective client values
 # // END STORAGE ACCOUNT
 
 # // START APIM
-api_management = {
- api_m = {
-        name                = "ava-mod-poc-apim"
-        location            = "eastus2"
-        resource_group_key = "shared"
-        publisher_name      = "Avanade"
-        publisher_email     = "s.vaz@avanade.com"
-        sku_name            = "Developer_1" // TO-DO: What's the opptions and diff ? 
-        tags                = ""
-        additional_location = null  // What's this for ? 
+# api_management = {
+#  api_m = {
+#         name                = "ava-mod-poc-apim"
+#         location            = "eastus2"
+#         resource_group_key = "shared"
+#         publisher_name      = "Avanade"
+#         publisher_email     = "s.vaz@avanade.com"
+#         sku_name            = "Developer_1" // TO-DO: What's the opptions and diff ? 
+#         tags                = ""
+#         additional_location = null  // What's this for ? 
 
 
-        apim_products_subscription = { // TO-DO: Documentation/ Explanation
-          apim_product1 = {
-              product_id            = "training-people-product-std"
-              product_display_name  = "PeopleStd"
-              product_description   = "demo std"  
-              subscription_state = "active"
-              subscription_display_name = "sethu_sub1"   
-          }
-        }      
- }
-}
+#         apim_products_subscription = { // TO-DO: Documentation/ Explanation
+#           apim_product1 = {
+#               product_id            = "training-people-product-std"
+#               product_display_name  = "PeopleStd"
+#               product_description   = "demo std"  
+#               subscription_state = "active"
+#               subscription_display_name = "sethu_sub1"   
+#           }
+#         }      
+#  }
+# }
 
 # // END APIM
 
