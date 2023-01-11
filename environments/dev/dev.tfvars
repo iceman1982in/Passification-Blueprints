@@ -43,6 +43,14 @@ resource_groups = {
     naming_convention = "name_mask:{name}"
   }
 
+  sqlmi = {
+    name              ="ava-mod-poc-dbsqlmi-rg"
+    enabled           = true
+    reuse             = true // false => will deploy the resource ; true => if the resource group exists
+    location          = "eastus2"
+    naming_convention = "name_mask:{name}"
+  }
+
 }
 
 # // START ACR
@@ -338,7 +346,7 @@ sql_server_db = {
 #   server1 = {
 #     name               = "ava-mod-poc-sqlservermi-dev"
 #     location           = "eastus2"
-#     resource_group_key = "db"
+#     resource_group_key = "sqlmi"
 #     sqlversion         = "12.0"
 #     admin_username     = "sqadmin123"
 #     admin_password     = "Sqadmin#11122"
