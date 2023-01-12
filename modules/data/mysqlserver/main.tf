@@ -27,7 +27,8 @@ resource "azurerm_mysql_flexible_server" "primary" {
   #auto_grow_enabled                 = try(var.auto_grow_enabled,true)
   backup_retention_days             = var.backup_retention_days  
   geo_redundant_backup_enabled      = try(var.geo_redundant_backup_enabled,false)
-
+  zone                              = "2" // TO-DO: MOVE THIS TO VARIABLE
+  
   # infrastructure_encryption_enabled = try(var.infrastructure_encryption_enabled,false)
   # public_network_access_enabled     = try(var.public_network_access_enabled,true)
   # ssl_enforcement_enabled           = try(var.ssl_enforcement_enabled,true)
