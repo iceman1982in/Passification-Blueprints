@@ -203,7 +203,8 @@ appservice = {
     location           = "eastus2"
     resource_group_key = "app"
     app_plan_id        = "appserviceplan-dev"
-    app_insightskey   =   "appinsights"
+    app_insightskey    =   "appinsights"
+    use_32_bit_worker  = false  //  TO-DO: Consume this variable in the deployment
     https_only = true
     vnet_route_all_enabled = true
   }
@@ -214,6 +215,7 @@ appservice = {
     resource_group_key = "app"
     app_plan_id        = "appserviceplan-dev"
     app_insightskey   =   "appinsights"
+    use_32_bit_worker  = false  //  TO-DO: Consume this variable in the deployment
     https_only = true
     vnet_route_all_enabled = true
   }  
@@ -234,6 +236,7 @@ appservice = {
     resource_group_key = "app"
     app_plan_id        = "appserviceplanlinux-dev"
     app_insightskey   =   "appinsights"
+    use_32_bit_worker  = false  //  TO-DO: Consume this variable in the deployment
     https_only = true
     vnet_route_all_enabled = true
   }  
