@@ -16,7 +16,8 @@ trigger: #none
 
 
 pool:
-  vmimage: 'windows-2019'
+  #vmimage: 'windows-2019'
+  name: 'SamVaz-AgentPool'
 
 variables:
 - template: pipeline_variable.yml  # Template reference
