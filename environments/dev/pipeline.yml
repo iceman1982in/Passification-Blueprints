@@ -19,7 +19,7 @@ pool:
   vmimage: 'windows-2019'
 
 variables:
-- template: pipeline_variable.yml  # Template reference
+- template: $(templatename)  # Template reference
 
 stages:
  - stage: 'Build'
@@ -151,7 +151,7 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'plan'
-                commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" -out=$(Build.Repository.LocalPath)/terraform/tfplan '
+                commandOptions: '-input=false -var-file="../environments/$(environment)/$(tfvars)" -out=$(Build.Repository.LocalPath)/terraform/tfplan '
                 workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'                
                 environmentServiceNameAzureRM: $(serviceConnection)
                     
