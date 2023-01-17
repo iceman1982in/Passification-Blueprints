@@ -19,7 +19,7 @@ pool:
   vmimage: 'windows-2019'
 
 variables:
-- template: $(templatename)  # Template reference
+- template: pipeline_variable.yml # Template reference
 
 stages:
  - stage: 'Build'

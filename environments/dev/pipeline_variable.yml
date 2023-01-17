@@ -26,8 +26,7 @@
   keyVaultName: KV_NAME
   storagekey: Will be AUTO GENERATED
   location: eastus2
-  tfvars: dev.tfvars
-  templatename: pipeline_variable.yml
+  tfvars: dev.tfvars  
   devOps_org_name: PaaSification
   devOps_project_name : PaaSification-Blueprint
   devOps_repo_name: PaaSificationBP-AllResources
