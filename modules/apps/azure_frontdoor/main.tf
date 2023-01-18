@@ -91,7 +91,7 @@ resource "azurerm_frontdoor" main {
 
 
                     dynamic "redirect_configuration" {
-                        for_each = routing_rule.value.redirect_configuration[*]
+                        for_each = routing_rule.value.configuration == "Redirecting" ? routing_rule.value.redirect_configuration : []
                         content {
                                 custom_host         = redirect_configuration.value.custom_host
                                 redirect_protocol   = lookup(redirect_configuration.value, "redirect_protocol", "MatchRequest")
