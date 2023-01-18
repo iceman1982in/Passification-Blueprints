@@ -54,7 +54,7 @@ resource "azurerm_frontdoor" main {
         }
 
         dynamic "frontend_endpoint" {
-                for_each = var.frontend_endpoints
+                for_each = var.frontend_endpoint
                 content {
                 name                                    = frontend_endpoint.value.name
                 host_name                               = frontend_endpoint.value.host_name

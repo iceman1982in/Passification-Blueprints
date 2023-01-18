@@ -29,7 +29,7 @@ variable "tags" {
   description = "(Required) Tags for Azure Front Door" 
 }
  
-variable "frontend_endpoints" {
+variable "frontend_endpoint" {
   description = "(Required) Frontend Endpoints for Azure Front Door"
 }
  
