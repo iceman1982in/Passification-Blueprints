@@ -1,21 +1,28 @@
 module "front-door" {
     source = "../modules/apps/azure_frontdoor"
 
+    for_each = {
+    for key, value in try(var.api_management, {}) : key => value
+    //if try(value.enabled, false) == true
+  }
+
   tags                                              = { Department = "Ops"}
-  frontdoor_resource_group_name                     =  "ava-mod-poc-shared-rg"
-  frontdoor_name                                    = "my-frontdoor"
-  frontdoor_loadbalancer_enabled                    = true
-  backend_pools_send_receive_timeout_seconds        = 240
+  frontdoor_resource_group_name                     = local.resource_groups[each.value.resource_group_key].name
+  frontdoor_name                                    = each.value.frontdoor_name
+  frontdoor_loadbalancer_enabled                    =  each.value.frontdoor_loadbalancer_enabled
+  backend_pools_send_receive_timeout_seconds        =  each.value.backend_pools_send_receive_timeout_seconds
     
-  frontend_endpoint      = [{
-      name                                    = "my-frontdoor-frontend-endpoint"
-      host_name                               = "my-frontdoor.azurefd.net"
-      custom_https_provisioning_enabled       = false
-      custom_https_configuration              = { certificate_source = "FrontDoor"}
-      session_affinity_enabled                = false
-      session_affinity_ttl_seconds            = 0
-      waf_policy_link_id                      = ""
-  }]
+  # frontend_endpoint      = [{
+  #     name                                    = "my-frontdoor-frontend-endpoint"
+  #     host_name                               = "my-frontdoor.azurefd.net"
+  #     custom_https_provisioning_enabled       = false
+  #     custom_https_configuration              = { certificate_source = "FrontDoor"}
+  #     session_affinity_enabled                = false
+  #     session_affinity_ttl_seconds            = 0
+  #     waf_policy_link_id                      = ""
+  # }]
+
+  frontend_endpoint   = each.value.frontend_endpoints
 
   frontdoor_routing_rule = [{
       name               = "my-routing-rule"

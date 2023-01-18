@@ -5,7 +5,7 @@ resource "azurerm_frontdoor" main {
         backend_pools_send_receive_timeout_seconds   = var.backend_pools_send_receive_timeout_seconds
         enforce_backend_pools_certificate_name_check = var.enforce_backend_pools_certificate_name_check
         load_balancer_enabled                        = var.frontdoor_loadbalancer_enabled
-        friendly_name                                = var.friendly_name
+        #friendly_name                                = var.friendly_name
         tags = var.tags
 
         dynamic "backend_pool" {
@@ -56,17 +56,17 @@ resource "azurerm_frontdoor" main {
         dynamic "frontend_endpoint" {
                 for_each = var.frontend_endpoint
                 content {
-                name                                    = frontend_endpoint.value.name
-                host_name                               = frontend_endpoint.value.host_name
-                session_affinity_enabled                = frontend_endpoint.value.session_affinity_enabled
-                session_affinity_ttl_seconds            = frontend_endpoint.value.session_affinity_ttl_seconds
-                web_application_firewall_policy_link_id = var.web_application_firewall_policy != null && frontend_endpoint.value.web_application_firewall_policy_link_id == null ? element([for k in azurerm_frontdoor_firewall_policy.main : k.id], 0) : frontend_endpoint.value.web_application_firewall_policy_link_id
+                        name                                    = frontend_endpoint.value.name
+                        host_name                               = frontend_endpoint.value.host_name
+                        session_affinity_enabled                = frontend_endpoint.value.session_affinity_enabled
+                        session_affinity_ttl_seconds            = frontend_endpoint.value.session_affinity_ttl_seconds
+                        web_application_firewall_policy_link_id = var.web_application_firewall_policy != null && frontend_endpoint.value.web_application_firewall_policy_link_id == null ? element([for k in azurerm_frontdoor_firewall_policy.main : k.id], 0) : frontend_endpoint.value.web_application_firewall_policy_link_id
                 }
         }
 
 
-        dynamic "frontdoor_routing_rule" {
-                for_each = var.routing_rules
+        dynamic "routing_rule" {
+                for_each = var.frontdoor_routing_rule
                 content {
                     name               = routing_rule.value.name
                     frontend_endpoints = routing_rule.value.frontend_endpoints

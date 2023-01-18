@@ -31,14 +31,23 @@ resource_groups = {
 
 azure_frontdoors = {
   frontdoor1 = {
-    enabled                  = true
-    name                     = "avamodpocstorageaccount"
-    resource_group_key       = "shared"
-    location                 = "eastus2"
-    account_tier             = "Standard"
-    access_tier              = "Hot"
-    account_replication_type = "LRS"
-    account_kind             = "StorageV2"
+    tags                                              = { Department = "Ops"}
+    resource_group_key                     =  "shared"
+    frontdoor_name                                    = "my-frontdoor"
+    frontdoor_loadbalancer_enabled                    = true
+    backend_pools_send_receive_timeout_seconds        = 240
+
+     frontend_endpoints     =  {
+      ep1 = {
+            name                                    = "my-frontdoor-frontend-endpoint"
+            host_name                               = "my-frontdoor.azurefd.net"
+            custom_https_provisioning_enabled       = false
+            custom_https_configuration              = { certificate_source = "FrontDoor"}
+            session_affinity_enabled                = false
+            session_affinity_ttl_seconds            = 0
+            waf_policy_link_id                      = ""
+         }
+     }
   }
 }
 
