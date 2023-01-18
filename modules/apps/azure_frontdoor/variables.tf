@@ -33,18 +33,18 @@ variable "frontend_endpoints" {
   description = "(Required) Frontend Endpoints for Azure Front Door"
 }
  
-variable "routing_rules" {
+variable "frontdoor_routing_rule" {
   description = "(Required) Routing rules for Azure Front Door"
 }
  
-variable "backend_pool_load_balancing" {
+variable "frontdoor_loadbalancer" {
   description = "(Required) Load Balancer settings for Azure Front Door"
 }
  
-variable "backend_pool_health_probes" {
+variable "frontdoor_health_probe" {
   description = "(Required) Health Probe settings for Azure Front Door"
 }
  
-variable "backend_pools" {
+variable "frontdoor_backend" {
   description = "(Required) Backend settings for Azure Front Door"
 }

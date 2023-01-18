@@ -10,7 +10,7 @@ resource "azurerm_frontdoor" main {
 
         dynamic "backend_pool" {
 
-                for_each = var.backend_pools
+                for_each = var.frontdoor_backend
                 content {
                     name                = backend_pool.value.name
                     load_balancing_name = backend_pool.value.load_balancing_name
@@ -32,19 +32,19 @@ resource "azurerm_frontdoor" main {
         }
 
         dynamic "backend_pool_health_probe" {
-                for_each = var.backend_pool_health_probes
+                for_each = var.frontdoor_health_probe
                 content {
-                name                = backend_pool_health_probe.value.name
-                enabled             = true
-                path                = backend_pool_health_probe.value.path
-                protocol            = backend_pool_health_probe.value.protocol
-                probe_method        = backend_pool_health_probe.value.probe_method
-                interval_in_seconds = backend_pool_health_probe.value.interval_in_seconds
+                        name                = backend_pool_health_probe.value.name
+                        enabled             = backend_pool_health_probe.value.enabled
+                        path                = backend_pool_health_probe.value.path
+                        protocol            = backend_pool_health_probe.value.protocol
+                        probe_method        = backend_pool_health_probe.value.probe_method
+                        interval_in_seconds = backend_pool_health_probe.value.interval_in_seconds
                 }
         }
 
         dynamic "backend_pool_load_balancing" {
-                for_each = var.backend_pool_load_balancing
+                for_each = var.frontdoor_loadbalancer
                 content {
                         name                            = backend_pool_load_balancing.value.name
                         sample_size                     = backend_pool_load_balancing.value.sample_size
@@ -65,7 +65,7 @@ resource "azurerm_frontdoor" main {
         }
 
 
-        dynamic "routing_rule" {
+        dynamic "frontdoor_routing_rule" {
                 for_each = var.routing_rules
                 content {
                     name               = routing_rule.value.name
