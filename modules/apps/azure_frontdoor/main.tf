@@ -79,13 +79,13 @@ resource "azurerm_frontdoor" main {
                     dynamic "forwarding_configuration" {
                         for_each = routing_rule.value.forwarding_configuration[*]
                         content {
-                        backend_pool_name                     = forwarding_configuration.value.backend_pool_name
-                        cache_enabled                         = lookup(forwarding_configuration.value, "cache_enabled", false)
-                        cache_use_dynamic_compression         = lookup(forwarding_configuration.value, "cache_use_dynamic_compression", false)
-                        cache_query_parameter_strip_directive = lookup(forwarding_configuration.value, "cache_query_parameter_strip_directive", "StripAll")                        
-                        cache_duration                        = forwarding_configuration.value.cache_enabled == true ? forwarding_configuration.value.cache_duration : null
-                        custom_forwarding_path                = forwarding_configuration.value.custom_forwarding_path
-                        forwarding_protocol                   = forwarding_configuration.value.forwarding_protocol
+                                backend_pool_name                     = forwarding_configuration.value.backend_pool_name
+                                cache_enabled                         = lookup(forwarding_configuration.value, "cache_enabled", false)
+                                cache_use_dynamic_compression         = lookup(forwarding_configuration.value, "cache_use_dynamic_compression", false)
+                                cache_query_parameter_strip_directive = lookup(forwarding_configuration.value, "cache_query_parameter_strip_directive", "StripAll")                        
+                                cache_duration                        = forwarding_configuration.value.cache_enabled == true ? forwarding_configuration.value.cache_duration : null
+                                custom_forwarding_path                = forwarding_configuration.value.custom_forwarding_path
+                                forwarding_protocol                   = forwarding_configuration.value.forwarding_protocol
                         }
                     }
 
