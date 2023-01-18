@@ -1,11 +1,12 @@
-resource "azurerm_frontdoor" azurerm_frontdoor {
+resource "azurerm_frontdoor" main {
 
-        name                = var.azurerm_frontdoor.name
-        resource_group_name = var.resource_group_name
+        name                = var.frontdoor_name
+        resource_group_name = var.frontdoor_resource_group_name
         backend_pools_send_receive_timeout_seconds   = var.backend_pools_send_receive_timeout_seconds
         enforce_backend_pools_certificate_name_check = var.enforce_backend_pools_certificate_name_check
-        load_balancer_enabled                        = true
+        load_balancer_enabled                        = var.frontdoor_loadbalancer_enabled
         friendly_name                                = var.friendly_name
+        tags = var.tags
 
         dynamic "backend_pool" {
 
@@ -45,10 +46,10 @@ resource "azurerm_frontdoor" azurerm_frontdoor {
         dynamic "backend_pool_load_balancing" {
                 for_each = var.backend_pool_load_balancing
                 content {
-                name                            = backend_pool_load_balancing.value.name
-                sample_size                     = backend_pool_load_balancing.value.sample_size
-                successful_samples_required     = backend_pool_load_balancing.value.successful_samples_required
-                additional_latency_milliseconds = backend_pool_load_balancing.value.additional_latency_milliseconds
+                        name                            = backend_pool_load_balancing.value.name
+                        sample_size                     = backend_pool_load_balancing.value.sample_size
+                        successful_samples_required     = backend_pool_load_balancing.value.successful_samples_required
+                        additional_latency_milliseconds = backend_pool_load_balancing.value.additional_latency_milliseconds
                 }
         }
 
