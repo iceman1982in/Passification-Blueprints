@@ -22,13 +22,13 @@ resource "azurerm_frontdoor" main {
                     dynamic "backend" {
                         for_each = backend_pool.value.backend[*]
                         content {
-                        enabled     = true
-                        address     = backend.value.address
-                        host_header = backend.value.host_header
-                        http_port   = backend.value.http_port
-                        https_port  = backend.value.https_port
-                        priority    = backend.value.priority
-                        weight      = backend.value.weight
+                                enabled     = true
+                                address     = backend.value.address
+                                host_header = backend.value.host_header
+                                http_port   = backend.value.http_port
+                                https_port  = backend.value.https_port
+                                priority    = backend.value.priority
+                                weight      = backend.value.weight
                         }
                     }
                 }
@@ -71,7 +71,7 @@ resource "azurerm_frontdoor" main {
                 for_each = var.frontdoor_routing_rule
                 content {
                     name               = routing_rule.value.name
-                    frontend_endpoints = routing_rule.value.frontend_endpoints
+                    frontend_endpoints = values({for x, endpoint in var.frontend_endpoint : x => endpoint.name})
                     accepted_protocols = routing_rule.value.accepted_protocols
                     patterns_to_match  = routing_rule.value.patterns_to_match
                     enabled            = true
@@ -82,8 +82,7 @@ resource "azurerm_frontdoor" main {
                         backend_pool_name                     = forwarding_configuration.value.backend_pool_name
                         cache_enabled                         = lookup(forwarding_configuration.value, "cache_enabled", false)
                         cache_use_dynamic_compression         = lookup(forwarding_configuration.value, "cache_use_dynamic_compression", false)
-                        cache_query_parameter_strip_directive = lookup(forwarding_configuration.value, "cache_query_parameter_strip_directive", "StripAll")
-                        cache_query_parameters                = forwarding_configuration.value.cache_query_parameters
+                        cache_query_parameter_strip_directive = lookup(forwarding_configuration.value, "cache_query_parameter_strip_directive", "StripAll")                        
                         cache_duration                        = forwarding_configuration.value.cache_enabled == true ? forwarding_configuration.value.cache_duration : null
                         custom_forwarding_path                = forwarding_configuration.value.custom_forwarding_path
                         forwarding_protocol                   = forwarding_configuration.value.forwarding_protocol

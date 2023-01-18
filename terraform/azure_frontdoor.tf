@@ -58,7 +58,7 @@ module "front-door" {
 
   frontdoor_backend =  [{
       name               = "backendBing"
-      loadbalancing_name = "loadbalancer"
+      load_balancing_name = "loadbalancer"
       health_probe_name  = "healthprobe"
       backend = [{
         enabled     = true
