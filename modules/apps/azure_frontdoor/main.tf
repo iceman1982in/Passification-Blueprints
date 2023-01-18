@@ -2,14 +2,17 @@ resource "azurerm_frontdoor" main {
 
         name                = var.frontdoor_name
         resource_group_name = var.frontdoor_resource_group_name
-        backend_pools_send_receive_timeout_seconds   = var.backend_pools_send_receive_timeout_seconds
-        enforce_backend_pools_certificate_name_check = var.enforce_backend_pools_certificate_name_check
+       
         load_balancer_enabled                        = var.frontdoor_loadbalancer_enabled
         #friendly_name                                = var.friendly_name
         tags = var.tags
 
-        dynamic "backend_pool" {
+         backend_pool_settings {
+                 backend_pools_send_receive_timeout_seconds   = var.backend_pools_send_receive_timeout_seconds
+                 enforce_backend_pools_certificate_name_check = var.enforce_backend_pools_certificate_name_check
+          }
 
+        dynamic "backend_pool" {
                 for_each = var.frontdoor_backend
                 content {
                     name                = backend_pool.value.name
@@ -63,7 +66,6 @@ resource "azurerm_frontdoor" main {
                         web_application_firewall_policy_link_id = var.web_application_firewall_policy != null && frontend_endpoint.value.web_application_firewall_policy_link_id == null ? element([for k in azurerm_frontdoor_firewall_policy.main : k.id], 0) : frontend_endpoint.value.web_application_firewall_policy_link_id
                 }
         }
-
 
         dynamic "routing_rule" {
                 for_each = var.frontdoor_routing_rule
