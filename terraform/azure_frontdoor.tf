@@ -2,7 +2,7 @@ module "front-door" {
     source = "../modules/apps/azure_frontdoor"
 
     for_each = {
-    for key, value in try(var.api_management, {}) : key => value
+    for key, value in try(var.azure_frontdoors, {}) : key => value
     //if try(value.enabled, false) == true
   }
 
