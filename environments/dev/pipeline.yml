@@ -68,7 +68,7 @@ stages:
 
                 call az storage account create --name $(terraformstorageaccount) --resource-group $(terraformstoragerg) --location $(location) --sku Standard_LRS --min-tls-version TLS1_2
 
-                call az storage container create --name $(environment) --account-name $(terraformstorageaccount)
+                call az storage container create --name $(terraform_containername) --account-name $(terraformstorageaccount)
 
                 call az storage account keys list -g $(terraformstoragerg) -n $(terraformstorageaccount)
             

@@ -20,9 +20,9 @@
   terraformstorageaccount: 'tfpaasificationpocsa'
   terraformSubscription: fb6eefcf-89bb-4ee1-8690-a799d5eb008e
   terraformstoragerg: AVA-TFADMIN-DEV-PAAS
-  environment: frontdoor
+  environment: dev
   tenant_id: 5c7fbefe-6f52-4cab-bb0f-099dc2e314b9
-  terraform_containername: 'dev'  
+  terraform_containername: 'frontdoor'  
   keyVaultName: KV_NAME
   storagekey: Will be AUTO GENERATED
   location: eastus2
