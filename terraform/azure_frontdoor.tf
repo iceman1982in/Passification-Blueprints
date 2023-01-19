@@ -32,7 +32,7 @@ module "front-door" {
       configuration      = "Forwarding"
       forwarding_configuration = [{
         backend_pool_name                     = "backendBing"
-        cache_enabled                         = false       
+        cache_enabled                         = true       
         cache_use_dynamic_compression         = false       
         cache_query_parameter_strip_directive = "StripNone" 
         custom_forwarding_path                = ""
