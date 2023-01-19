@@ -21,7 +21,7 @@ azure_frontdoors = {
     backend_pools_send_receive_timeout_seconds        = 240
 
     frontend_endpoints =  {
-      ep1 = {
+        ep1 = {
             name                                    = "ava-mod-poc-shared-frontend-endpoint"
             host_name                               = "ava-mod-poc-shared.azurefd.net"
             custom_https_provisioning_enabled       = false
@@ -60,11 +60,9 @@ azure_frontdoors = {
                 successful_samples_required     = 2
                 additional_latency_milliseconds = 0
             }
-        }
-
     }
 
-
+    
     frontdoor_health_probe = {  
         probe1= {    
             name                = "healthprobe"
@@ -78,18 +76,18 @@ azure_frontdoors = {
 
     frontdoor_backend =  {
         backend1= {
-        name               = "backendBing"
-        load_balancing_name = "loadbalancer"
-        health_probe_name  = "healthprobe"
-        backend = {
-            enabled     = true
-            host_header = "www.bing.com"
-            address     = "www.bing.com"
-            http_port   = 80
-            https_port  = 443
-            priority    = 1
-            weight      = 50
-        }
+            name               = "backendBing"
+            load_balancing_name = "loadbalancer"
+            health_probe_name  = "healthprobe"
+            backend = {
+                enabled     = true
+                host_header = "www.bing.com"
+                address     = "www.bing.com"
+                http_port   = 80
+                https_port  = 443
+                priority    = 1
+                weight      = 50
+            }
         }
     }
 }
