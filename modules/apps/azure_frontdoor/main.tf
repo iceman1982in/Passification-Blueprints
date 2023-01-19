@@ -74,7 +74,7 @@ resource "azurerm_frontdoor" main {
                     frontend_endpoints = values({for x, endpoint in var.frontend_endpoint : x => endpoint.name})
                     accepted_protocols = routing_rule.value.accepted_protocols
                     patterns_to_match  = routing_rule.value.patterns_to_match
-                    enabled            = true
+                    #enabled            = true
 
                     dynamic "forwarding_configuration" {
                         for_each = routing_rule.value.forwarding_configuration[*]
@@ -86,6 +86,7 @@ resource "azurerm_frontdoor" main {
                                 custom_forwarding_path                = forwarding_configuration.value.custom_forwarding_path
                                 forwarding_protocol                   = forwarding_configuration.value.forwarding_protocol
                         }
+                    }
 
 
                     dynamic "redirect_configuration" {
@@ -102,5 +103,4 @@ resource "azurerm_frontdoor" main {
                 }
         }
 
-}
 }
