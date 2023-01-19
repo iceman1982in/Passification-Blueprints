@@ -63,7 +63,7 @@ resource "azurerm_frontdoor" main {
                         host_name                               = frontend_endpoint.value.host_name
                         session_affinity_enabled                = frontend_endpoint.value.session_affinity_enabled
                         session_affinity_ttl_seconds            = frontend_endpoint.value.session_affinity_ttl_seconds
-                        custom_https_provisioning_enabled       = frontend_endpoint.value.custom_https_provisioning_enabled
+                        #custom_https_provisioning_enabled       = frontend_endpoint.value.custom_https_provisioning_enabled
                         web_application_firewall_policy_link_id = frontend_endpoint.value.waf_policy_link_id
                         #web_application_firewall_policy_link_id = var.web_application_firewall_policy != null && frontend_endpoint.value.web_application_firewall_policy_link_id == null ? element([for k in azurerm_frontdoor_firewall_policy.main : k.id], 0) : frontend_endpoint.value.web_application_firewall_policy_link_id
                 }
