@@ -61,9 +61,38 @@ azure_frontdoors = {
                 successful_samples_required     = 2
                 additional_latency_milliseconds = 0
             }
-    }
+        }
 
     }
+
+
+    frontdoor_health_probe = {  
+        probe1= {    
+            name                = "healthprobe"
+            enabled             = true
+            path                = "/"
+            protocol            = "Http"
+            probe_method        = "HEAD"
+            interval_in_seconds = 60
+        }
+    }
+
+  frontdoor_backend =  {
+    backend1= {
+      name               = "backendBing"
+      load_balancing_name = "loadbalancer"
+      health_probe_name  = "healthprobe"
+      backend = {
+        enabled     = true
+        host_header = "www.bing.com"
+        address     = "www.bing.com"
+        http_port   = 80
+        https_port  = 443
+        priority    = 1
+        weight      = 50
+      }
+    }
+  }
 }
 
 
