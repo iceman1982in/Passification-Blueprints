@@ -24,21 +24,24 @@ module "front-door" {
 
   frontend_endpoint   = each.value.frontend_endpoints
 
-  frontdoor_routing_rule = [{
-      name               = "my-routing-rule"
-      accepted_protocols = ["Http", "Https"] 
-      patterns_to_match  = ["/*"]
-      enabled            = true              
-      configuration      = "Forwarding"
-      forwarding_configuration = [{
-        backend_pool_name                     = "backendBing"
-        cache_enabled                         = true       
-        cache_use_dynamic_compression         = false       
-        cache_query_parameter_strip_directive = "StripNone" 
-        custom_forwarding_path                = ""
-        forwarding_protocol                   = "MatchRequest"   
-      }]      
-  }]
+
+  frontdoor_routing_rule = each.value.frontdoor_routing_rule
+
+  # frontdoor_routing_rule = [{
+  #     name               = "my-routing-rule"
+  #     accepted_protocols = ["Http", "Https"] 
+  #     patterns_to_match  = ["/*"]
+  #     enabled            = true              
+  #     configuration      = "Forwarding"
+  #     forwarding_configuration = [{
+  #       backend_pool_name                     = "backendBing"
+  #       cache_enabled                         = true       
+  #       cache_use_dynamic_compression         = false       
+  #       cache_query_parameter_strip_directive = "StripNone" 
+  #       custom_forwarding_path                = ""
+  #       forwarding_protocol                   = "MatchRequest"   
+  #     }]      
+  # }]
 
   frontdoor_loadbalancer =  [{      
       name                            = "loadbalancer"
