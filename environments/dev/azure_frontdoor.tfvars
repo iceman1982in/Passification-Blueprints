@@ -23,7 +23,7 @@ azure_frontdoors = {
         frontend_endpoints =  {
             ep1 = {
                 name                                    = "ava-mod-poc-shared-frontend-endpoint"
-                host_name                               = "ava-mod-poc-shared.azurefd.net"
+                host_name                               = "ava-mod-poc-shared-frontdoor.azurefd.net"
                 custom_https_provisioning_enabled       = false
                 custom_https_configuration              = { certificate_source = "FrontDoor"}
                 session_affinity_enabled                = false
