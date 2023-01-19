@@ -7,7 +7,7 @@ resource "azurerm_frontdoor" main {
         #friendly_name                                = var.friendly_name
         tags = var.tags
 
-         backend_pool_settings {
+        backend_pool_settings {
                  backend_pools_send_receive_timeout_seconds   = var.backend_pools_send_receive_timeout_seconds
                  enforce_backend_pools_certificate_name_check = var.enforce_backend_pools_certificate_name_check
           }
@@ -102,4 +102,5 @@ resource "azurerm_frontdoor" main {
                 }
         }
 
+}
 }
