@@ -80,21 +80,19 @@ resource "azurerm_frontdoor" main {
                         for_each = routing_rule.value.forwarding_configuration[*]
                         content {
                                 backend_pool_name                     = forwarding_configuration.value.backend_pool_name
-                                cache_enabled                         = lookup(forwarding_configuration.value, "cache_enabled", false)
-                                cache_use_dynamic_compression         = lookup(forwarding_configuration.value, "cache_use_dynamic_compression", false)
-                                cache_query_parameter_strip_directive = lookup(forwarding_configuration.value, "cache_query_parameter_strip_directive", "StripAll")                        
-                                cache_duration                        = forwarding_configuration.value.cache_enabled == true ? forwarding_configuration.value.cache_duration : null
+                                cache_enabled                         = forwarding_configuration.value.cache_enabled
+                                cache_use_dynamic_compression         = forwarding_configuration.value.cache_use_dynamic_compression #default: false
+                                cache_query_parameter_strip_directive = forwarding_configuration.value.cache_query_parameter_strip_directive
                                 custom_forwarding_path                = forwarding_configuration.value.custom_forwarding_path
                                 forwarding_protocol                   = forwarding_configuration.value.forwarding_protocol
                         }
-                    }
 
 
                     dynamic "redirect_configuration" {
                         for_each = routing_rule.value.configuration == "Redirecting" ? routing_rule.value.redirect_configuration : []
                         content {
                                 custom_host         = redirect_configuration.value.custom_host
-                                redirect_protocol   = lookup(redirect_configuration.value, "redirect_protocol", "MatchRequest")
+                                redirect_protocol   = redirect_configuration.value.redirect_protocol
                                 redirect_type       = redirect_configuration.value.redirect_type
                                 custom_fragment     = redirect_configuration.value.custom_fragment
                                 custom_path         = redirect_configuration.value.custom_path
