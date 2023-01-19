@@ -240,7 +240,7 @@ stages:
                   provider: 'azurerm'
                   command: 'apply'
                   workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'       
-                  commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" '
+                  commandOptions: '-input=false -var-file="../environments/$(environment)/$(tfvars)" '
                   environmentServiceNameAzureRM: $(serviceConnection)
 
  

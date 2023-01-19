@@ -21,7 +21,7 @@ azure_frontdoors = {
     frontdoor_loadbalancer_enabled                    = true
     backend_pools_send_receive_timeout_seconds        = 240
 
-     frontend_endpoints     =  {
+    frontend_endpoints     =  {
       ep1 = {
             name                                    = "my-frontdoor-frontend-endpoint"
             host_name                               = "my-frontdoor.azurefd.net"
@@ -32,7 +32,35 @@ azure_frontdoors = {
             waf_policy_link_id                      = ""
          }
      }
-  }
+
+    frontdoor_routing_rule = {
+        rule1={
+                name               = "my-routing-rule"
+                accepted_protocols = ["Http", "Https"] 
+                patterns_to_match  = ["/*"]
+                enabled            = true              
+                configuration      = "Forwarding"
+                forwarding_configuration = {
+                    backend_pool_name                     = "backendBing"
+                    cache_enabled                         = true       
+                    cache_use_dynamic_compression         = false       
+                    cache_query_parameter_strip_directive = "StripNone" 
+                    custom_forwarding_path                = ""
+                    forwarding_protocol                   = "MatchRequest"   
+                }
+        }
+     }
+
+
+
+    frontdoor_loadbalancer =  {
+        lb1= {
+                name                            = "loadbalancer"
+                sample_size                     = 4
+                successful_samples_required     = 2
+                additional_latency_milliseconds = 0
+            }
+    }
 }
 
 
