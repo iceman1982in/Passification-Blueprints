@@ -12,7 +12,6 @@ resource_groups = {
   }  
 }
 
-
 azure_frontdoors = {
   frontdoor1 = { 
     tags                                   = { Department = "Ops"}
