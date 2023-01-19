@@ -61,6 +61,8 @@ azure_frontdoors = {
                 additional_latency_milliseconds = 0
             }
     }
+
+    }
 }
 
 
