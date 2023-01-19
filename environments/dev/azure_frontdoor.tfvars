@@ -14,14 +14,14 @@ resource_groups = {
 
 
 azure_frontdoors = {
-  frontdoor1 = {
+  frontdoor1 = { 
     tags                                   = { Department = "Ops"}
     resource_group_key                     =  "shared"
     frontdoor_name                                    = "ava-mod-poc-shared-frontdoor"
     frontdoor_loadbalancer_enabled                    = true
     backend_pools_send_receive_timeout_seconds        = 240
 
-    frontend_endpoints     =  {
+    frontend_endpoints =  {
       ep1 = {
             name                                    = "ava-mod-poc-shared-frontend-endpoint"
             host_name                               = "ava-mod-poc-shared.azurefd.net"
@@ -31,7 +31,7 @@ azure_frontdoors = {
             session_affinity_ttl_seconds            = 0
             waf_policy_link_id                      = ""
          }
-     }
+    }
 
     frontdoor_routing_rule = {
         rule1={
@@ -50,7 +50,7 @@ azure_frontdoors = {
                     forwarding_protocol                   = "MatchRequest"   
                 }
         }
-     }
+    }
 
 
 
@@ -77,22 +77,22 @@ azure_frontdoors = {
         }
     }
 
-  frontdoor_backend =  {
-    backend1= {
-      name               = "backendBing"
-      load_balancing_name = "loadbalancer"
-      health_probe_name  = "healthprobe"
-      backend = {
-        enabled     = true
-        host_header = "www.bing.com"
-        address     = "www.bing.com"
-        http_port   = 80
-        https_port  = 443
-        priority    = 1
-        weight      = 50
-      }
+    frontdoor_backend =  {
+        backend1= {
+        name               = "backendBing"
+        load_balancing_name = "loadbalancer"
+        health_probe_name  = "healthprobe"
+        backend = {
+            enabled     = true
+            host_header = "www.bing.com"
+            address     = "www.bing.com"
+            http_port   = 80
+            https_port  = 443
+            priority    = 1
+            weight      = 50
+        }
+        }
     }
-  }
 }
 
 
