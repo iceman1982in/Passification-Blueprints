@@ -8,7 +8,7 @@ module "front-door" {
 
   tags                                              = { Department = "Ops"}
   frontdoor_resource_group_name                     = local.resource_groups[each.value.resource_group_key].name
-  frontdoor_name                                    = each.value.frontdoor_name
+  frontdoor_name                                    =  each.value.frontdoor_name
   frontdoor_loadbalancer_enabled                    =  each.value.frontdoor_loadbalancer_enabled
   backend_pools_send_receive_timeout_seconds        =  each.value.backend_pools_send_receive_timeout_seconds
     

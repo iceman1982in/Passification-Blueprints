@@ -17,14 +17,14 @@ azure_frontdoors = {
   frontdoor1 = {
     tags                                   = { Department = "Ops"}
     resource_group_key                     =  "shared"
-    frontdoor_name                                    = "my-frontdoor"
+    frontdoor_name                                    = "ava-mod-poc-shared-frontdoor"
     frontdoor_loadbalancer_enabled                    = true
     backend_pools_send_receive_timeout_seconds        = 240
 
     frontend_endpoints     =  {
       ep1 = {
-            name                                    = "my-frontdoor-frontend-endpoint"
-            host_name                               = "my-frontdoor.azurefd.net"
+            name                                    = "ava-mod-poc-shared-frontend-endpoint"
+            host_name                               = "ava-mod-poc-shared.azurefd.net"
             custom_https_provisioning_enabled       = false
             custom_https_configuration              = { certificate_source = "FrontDoor"}
             session_affinity_enabled                = false
@@ -35,7 +35,7 @@ azure_frontdoors = {
 
     frontdoor_routing_rule = {
         rule1={
-                name               = "my-routing-rule"
+                name               = "ava-mod-poc-shared-routing-rule"
                 accepted_protocols = ["Http", "Https"] 
                 patterns_to_match  = ["/*"]
                 enabled            = true              
