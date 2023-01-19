@@ -73,7 +73,8 @@ resource "azurerm_frontdoor" main {
                 for_each = var.frontdoor_routing_rule
                 content {
                     name               = routing_rule.value.name
-                    frontend_endpoints = values({for x, endpoint in var.frontend_endpoint : x => endpoint.name})
+                   # frontend_endpoints = values({for x, endpoint in var.frontend_endpoint : x => endpoint.name})
+                    frontend_endpoints = routing_rule.value.frontend_endpoints
                     accepted_protocols = routing_rule.value.accepted_protocols
                     patterns_to_match  = routing_rule.value.patterns_to_match
                     #enabled            = true

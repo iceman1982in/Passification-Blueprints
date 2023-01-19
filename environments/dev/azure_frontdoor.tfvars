@@ -40,6 +40,7 @@ azure_frontdoors = {
                 patterns_to_match  = ["/*"]
                 enabled            = true              
                 configuration      = "Forwarding"
+                frontend_endpoints = ["ava-mod-poc-shared-frontend-endpoint"]
                 forwarding_configuration = {
                     backend_pool_name                     = "backendBing"
                     cache_enabled                         = true       
