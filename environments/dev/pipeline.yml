@@ -137,7 +137,7 @@ stages:
                     backendServiceArm: $(serviceConnection)
                     backendAzureRmResourceGroupName: '$(terraformstoragerg)'
                     backendAzureRmStorageAccountName: '$(terraformstorageaccount) '
-                    backendAzureRmContainerName: '$(environment)'
+                    backendAzureRmContainerName: '$(terraform_containername)'
                     backendAzureRmKey: terraform.tfstate
             
             - task: TerraformTaskV3@3
