@@ -22,10 +22,11 @@
   terraformstoragerg: AVA-TFADMIN-DEV-PAAS
   environment: dev
   tenant_id: 5c7fbefe-6f52-4cab-bb0f-099dc2e314b9
-  terraform_containername: 'dev'  
+  terraform_containername: 'frontdoor'  
   keyVaultName: KV_NAME
   storagekey: Will be AUTO GENERATED
   location: eastus2
+  tfvars: azure_frontdoor.tfvars 
   devOps_org_name: PaaSification
   devOps_project_name : PaaSification-Blueprint
   devOps_repo_name: PaaSificationBP-AllResources
