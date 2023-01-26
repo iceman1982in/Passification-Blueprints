@@ -20,7 +20,7 @@ pool:
   name: 'SamVaz-AgentPool'
 
 variables:
-- template: pipeline_variable.yml  # Template reference
+- template: pipeline_variable.yml # Template reference
 
 stages:
  - stage: 'Build'
@@ -69,7 +69,7 @@ stages:
 
                 call az storage account create --name $(terraformstorageaccount) --resource-group $(terraformstoragerg) --location $(location) --sku Standard_LRS --min-tls-version TLS1_2
 
-                call az storage container create --name $(environment) --account-name $(terraformstorageaccount)
+                call az storage container create --name $(terraform_containername) --account-name $(terraformstorageaccount)
 
                 call az storage account keys list -g $(terraformstoragerg) -n $(terraformstorageaccount)
             
@@ -138,7 +138,7 @@ stages:
                     backendServiceArm: $(serviceConnection)
                     backendAzureRmResourceGroupName: '$(terraformstoragerg)'
                     backendAzureRmStorageAccountName: '$(terraformstorageaccount) '
-                    backendAzureRmContainerName: '$(environment)'
+                    backendAzureRmContainerName: '$(terraform_containername)'
                     backendAzureRmKey: terraform.tfstate
             
             - task: TerraformTaskV3@3
@@ -152,7 +152,7 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'plan'
-                commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" -out=$(Build.Repository.LocalPath)/terraform/tfplan '
+                commandOptions: '-input=false -var-file="../environments/$(environment)/$(tfvars)" -out=$(Build.Repository.LocalPath)/terraform/tfplan '
                 workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'                
                 environmentServiceNameAzureRM: $(serviceConnection)
                     
@@ -241,7 +241,7 @@ stages:
                   provider: 'azurerm'
                   command: 'apply'
                   workingDirectory: '$(Build.Repository.LocalPath)/terraform/terraform'       
-                  commandOptions: '-input=false -var-file="../environments/$(environment)/$(environment).tfvars" '
+                  commandOptions: '-input=false -var-file="../environments/$(environment)/$(tfvars)" '
                   environmentServiceNameAzureRM: $(serviceConnection)
 
  

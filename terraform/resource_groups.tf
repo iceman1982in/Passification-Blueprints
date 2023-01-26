@@ -1,9 +1,9 @@
 module "resource_groups" {
    source = "../modules/resourcegroup"
- for_each = {
-    for key, value in try(var.resource_groups, {}) : key => value
-    if try(value.reuse, false) == true && try(value.enabled, false) == true
-  }
+    for_each = {
+      for key, value in try(var.resource_groups, {}) : key => value
+      if try(value.reuse, false) == false && try(value.enabled, false) == true
+    }
   resource_group_name     = each.value.name
   resource_group_location = each.value.location
   tags                    = try(each.value.tags, null)
