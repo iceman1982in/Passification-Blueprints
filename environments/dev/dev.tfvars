@@ -19,8 +19,17 @@ resource_groups = {
   #   naming_convention = "name_mask:{name}" // TO-DO: - how to apply naming convention in all resources?
   # }
 
+
   shared = {
     name              = "ava-mod-poc-shared-rg"
+    enabled           = true
+    reuse             = true // false => will deploy the resource ; true => if the resource group exists
+    location          = "eastus2" // TO-DO: - how to move this to a variable ?
+    naming_convention = "name_mask:{name}" // TO-DO: - how to apply naming convention in all resources?
+  }
+  
+  apim = {
+    name              = "ava-mod-poc-apim-rg"
     enabled           = true
     reuse             = true // false => will deploy the resource ; true => if the resource group exists
     location          = "eastus2" // TO-DO: - how to move this to a variable ?
